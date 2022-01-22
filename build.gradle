@@ -1,2 +1,135 @@
+import com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer
+
+plugins {
+    id 'java'
+    id 'java-library'
+
+    id "com.github.ben-manes.versions" version "0.41.0"
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+}
+
+String getCommit() {
+    def stdout = new ByteArrayOutputStream()
+
+    exec {
+        commandLine "git", "rev-parse", "--short", "HEAD"
+        standardOutput = stdout
+    }
+
+    return stdout.toString().trim()
+}
+
+static boolean isNonStable(String version) {
+    def stableKeyword = ['RELEASE', 'FINAL', 'GA'].any { it -> version.toUpperCase().contains(it) }
+    def regex = /^[0-9,.v-]+(-r)?(-jre)?$/
+    return !stableKeyword && !(version ==~ regex)
+}
+
+dependencyUpdates {
+    configure {
+        rejectVersionIf {
+            isNonStable(it.candidate.version)
+        }
+
+        checkForGradleUpdate = true
+    }
+}
+
+apply from: new File(rootDir, "libs.gradle")
+
 group = 'io.github.whilein'
 version = '0.1.0-SNAPSHOT'
+
+dependencies {
+    implementation libs.terminalconsoleappender
+    implementation libs.jline.reader
+    implementation libs.jline.jansi
+
+    api libs.jackson.databind
+    api libs.jackson.yaml
+
+    api libs.fastutil
+
+    api libs.wcommons.agent
+    api libs.wcommons.util
+    api libs.wcommons.config
+    api libs.wcommons.eventbus
+    api libs.wcommons.geo.api
+    api libs.wcommons.geo.maxmind
+    api libs.wcommons.geo.caffeine
+    api libs.caffeine
+
+    runtimeOnly libs.disruptor
+
+    api libs.slf4j.api
+    api libs.log4j.api
+    implementation libs.log4j.core
+    implementation libs.log4j.iostreams
+    implementation libs.log4j.slf4j
+
+    compileOnly libs.lombok
+    annotationProcessor libs.lombok
+
+    testCompileOnly libs.lombok
+    testAnnotationProcessor libs.lombok
+
+    compileOnly libs.annotations
+    testCompileOnly libs.annotations
+
+    testImplementation libs.junit.api
+    testRuntimeOnly libs.junit.engine
+}
+
+shadowJar {
+    mergeServiceFiles()
+    transform new Log4j2PluginsCacheFileTransformer()
+
+    manifest {
+        attributes(
+                "Main-Class": "w.bot.Main",
+                "Specification-Version": project.version,
+                "Implementation-Version": getCommit(),
+                "Multi-Release": "true"
+        )
+    }
+
+    destinationDirectory = new File(rootDir, "output")
+    archiveFileName = "wbot.jar"
+}
+
+repositories {
+    mavenCentral()
+
+    // приватная репа с моим wcommons <3
+    // из-за этого вы не сможете скомпилить
+    // но мне похуй
+    maven {
+        url = "https://maven.pkg.github.com/LastCraftInc/wcommons"
+
+        credentials {
+            username = findProperty("gpr.user")
+            password = findProperty("gpr.password")
+        }
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_17
+}
+
+build {
+    dependsOn(shadowJar)
+}
+
+test {
+    useJUnitPlatform()
+
+    testLogging {
+        showStandardStreams = true
+
+        exceptionFormat "short"
+        events("started", "skipped", "failed")
+    }
+}
