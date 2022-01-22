@@ -14,8 +14,6 @@
  *    limitations under the License.
  */
 
-package w.bot;
-
 import lombok.experimental.UtilityClass;
 
 /**

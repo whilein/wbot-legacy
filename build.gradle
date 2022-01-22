@@ -86,7 +86,7 @@ shadowJar {
 
     manifest {
         attributes(
-                "Main-Class": "w.bot.Main",
+                "Main-Class": "Main",
                 "Specification-Version": project.version,
                 "Implementation-Version": getCommit(),
                 "Multi-Release": "true"
