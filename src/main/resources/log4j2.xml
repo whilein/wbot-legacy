@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30" packages="net.minecrell">
+
+    <Appenders>
+        <Console name="Console">
+            <PatternLayout pattern="[%d{HH:mm:ss} %level] %msg%n%xEx"/>
+        </Console>
+
+        <RollingRandomAccessFile name="File" fileName="logs/latest.log" filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz"
+                                 immediateFlush="false">
+            <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level] %msg%n%xEx"/>
+
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <OnStartupTriggeringPolicy/>
+            </Policies>
+        </RollingRandomAccessFile>
+    </Appenders>
+
+    <Loggers>
+        <Root level="debug">
+            <AppenderRef ref="Console" level="info"/>
+            <AppenderRef ref="File"/>
+        </Root>
+    </Loggers>
+
+</Configuration>

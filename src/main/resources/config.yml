@@ -1,0 +1,8 @@
+auth:
+  token: ''
+
+long-poll:
+  group-id: 0
+
+http:
+  threads: 8

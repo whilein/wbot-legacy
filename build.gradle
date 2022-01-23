@@ -41,7 +41,6 @@ group = 'io.github.whilein'
 version = '0.1.0-SNAPSHOT'
 
 dependencies {
-    implementation libs.terminalconsoleappender
     implementation libs.jline.reader
     implementation libs.jline.jansi
 
