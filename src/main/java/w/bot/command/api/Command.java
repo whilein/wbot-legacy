@@ -14,16 +14,23 @@
  *    limitations under the License.
  */
 
-package w.bot.method;
+package w.bot.command.api;
 
 import org.jetbrains.annotations.NotNull;
-import w.flow.Flow;
+import w.bot.VkBot;
+import w.bot.type.MessageSource;
+import w.bot.type.user.User;
 
 /**
  * @author whilein
  */
-public interface VkMethod<R> {
+public interface Command {
 
-    @NotNull Flow<R> make();
+    @NotNull String getName();
+
+    @NotNull String @NotNull [] getAliases();
+
+    void execute(@NotNull VkBot bot, @NotNull MessageSource source, @NotNull User sender,
+                 @NotNull String @NotNull [] args);
 
 }

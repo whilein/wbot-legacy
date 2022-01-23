@@ -14,16 +14,21 @@
  *    limitations under the License.
  */
 
-package w.bot.method;
-
-import org.jetbrains.annotations.NotNull;
-import w.flow.Flow;
+package w.bot.id;
 
 /**
  * @author whilein
  */
-public interface VkMethod<R> {
+public interface Id {
 
-    @NotNull Flow<R> make();
+    int CHAT_OFFSET = 2000000000;
+
+    int asInt();
+
+    boolean isUser();
+
+    boolean isChat();
+
+    boolean isGroup();
 
 }

@@ -14,16 +14,21 @@
  *    limitations under the License.
  */
 
-package w.bot.method;
-
-import org.jetbrains.annotations.NotNull;
-import w.flow.Flow;
+package w.bot.type.user.name;
 
 /**
  * @author whilein
  */
-public interface VkMethod<R> {
+public enum UserNameCase {
 
-    @NotNull Flow<R> make();
+    NOM, // именительный
+    GEN, // родительный
+    DAT, // дательный
+    ACC, // винительный
+    INS, // творительный
+    ABL; // предложный
+
+    public static final UserNameCase[] VALUES = values();
+
 
 }

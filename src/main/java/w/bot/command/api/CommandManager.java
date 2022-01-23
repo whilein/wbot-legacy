@@ -14,16 +14,15 @@
  *    limitations under the License.
  */
 
-package w.bot.method;
+package w.bot.command.api;
 
 import org.jetbrains.annotations.NotNull;
-import w.flow.Flow;
 
 /**
  * @author whilein
  */
-public interface VkMethod<R> {
+public interface CommandManager {
 
-    @NotNull Flow<R> make();
+    void register(@NotNull Command command);
 
 }

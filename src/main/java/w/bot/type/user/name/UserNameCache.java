@@ -14,16 +14,17 @@
  *    limitations under the License.
  */
 
-package w.bot.method;
+package w.bot.type.user.name;
 
 import org.jetbrains.annotations.NotNull;
-import w.flow.Flow;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author whilein
  */
-public interface VkMethod<R> {
+public interface UserNameCache {
 
-    @NotNull Flow<R> make();
+    @NotNull CompletableFuture<@NotNull UserName> getName(int userId);
 
 }

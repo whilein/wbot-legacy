@@ -19,6 +19,7 @@ package w.bot.longpoll.type;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import w.bot.id.Id;
 
 /**
  * @author whilein
@@ -54,7 +55,7 @@ public interface VkMessageAction {
      *
      * @return Идентификатор пользователя
      */
-    @Nullable Integer getMemberId();
+    @Nullable Id getMemberId();
 
     /**
      * Название беседы (для служебных сообщений с type = chat_create или chat_title_update).

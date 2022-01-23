@@ -19,6 +19,7 @@ package w.bot.longpoll.type;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import w.bot.id.Id;
 
 import java.util.List;
 
@@ -32,9 +33,9 @@ public interface VkMessage {
 
     long getDate();
 
-    int getFromId();
+    @NotNull Id getFromId();
 
-    int getPeerId();
+    @NotNull Id getPeerId();
 
     int getId();
 

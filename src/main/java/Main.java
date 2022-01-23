@@ -52,16 +52,14 @@ public class Main {
 
     @Subscribe(exactEvent = true)
     private static void onMessage(final VkMessageEvent event) {
-        log.info("msg " + event.getText() + " from " + event.getFromId() + " in " + event.getPeerId());
+        System.out.println(event.getMessage());
     }
 
     @Subscribe(exactEvent = true)
     private static void onInvite(final VkChatInviteUserEvent event) {
-        log.info("invite " + event.getMemberId() + " to " + event.getPeerId() + " by " + event.getFromId());
     }
 
     @Subscribe(exactEvent = true)
     private static void onKick(final VkChatKickUserEvent event) {
-        log.info("kick " + event.getMemberId() + " from " + event.getPeerId() + " by " + event.getFromId());
     }
 }

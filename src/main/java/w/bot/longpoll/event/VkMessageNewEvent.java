@@ -23,7 +23,6 @@ import lombok.experimental.Delegate;
 import lombok.experimental.FieldDefaults;
 import w.bot.VkBot;
 import w.bot.longpoll.type.VkMessage;
-import w.bot.util.IdUtils;
 
 /**
  * @author whilein
@@ -37,9 +36,5 @@ public abstract class VkMessageNewEvent implements VkEvent {
 
     @Delegate(types = VkMessage.class)
     VkMessage message;
-
-    public boolean isFromChat() {
-        return IdUtils.isChat(message.getPeerId());
-    }
 
 }

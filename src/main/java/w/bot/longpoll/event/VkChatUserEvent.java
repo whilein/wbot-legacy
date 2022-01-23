@@ -20,6 +20,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import w.bot.VkBot;
+import w.bot.id.Id;
 import w.bot.longpoll.type.VkMessage;
 
 /**
@@ -29,11 +30,11 @@ import w.bot.longpoll.type.VkMessage;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public abstract class VkChatUserEvent extends VkMessageNewEvent {
 
-    int memberId;
+    Id memberId;
     String email;
 
     public VkChatUserEvent(final VkBot bot, final VkMessage message,
-                           final int memberId, final String email) {
+                           final Id memberId, final String email) {
         super(bot, message);
 
         this.memberId = memberId;
@@ -41,7 +42,7 @@ public abstract class VkChatUserEvent extends VkMessageNewEvent {
     }
 
     public boolean isEmail() {
-        return memberId < 0 && email != null;
+        return memberId.isGroup() && email != null;
     }
 
 }

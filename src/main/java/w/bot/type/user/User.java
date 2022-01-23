@@ -14,16 +14,19 @@
  *    limitations under the License.
  */
 
-package w.bot.method;
+package w.bot.type.user;
 
 import org.jetbrains.annotations.NotNull;
-import w.flow.Flow;
+import w.bot.type.MessageSource;
+import w.bot.type.user.name.UserName;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author whilein
  */
-public interface VkMethod<R> {
+public interface User extends MessageSource {
 
-    @NotNull Flow<R> make();
+    @NotNull CompletableFuture<@NotNull UserName> getName();
 
 }

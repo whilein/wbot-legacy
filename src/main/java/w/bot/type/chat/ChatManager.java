@@ -14,20 +14,15 @@
  *    limitations under the License.
  */
 
-package w.bot.util;
+package w.bot.type.chat;
 
-import lombok.experimental.UtilityClass;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author whilein
  */
-@UtilityClass
-public class IdUtils {
+public interface ChatManager {
 
-    private static final int CHAT_OFFSET = 2000000000;
-
-    public static boolean isChat(final int peerId) {
-        return peerId > CHAT_OFFSET;
-    }
+    @NotNull Chat getChat(int chatId);
 
 }

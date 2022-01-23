@@ -45,6 +45,8 @@ ext {
     ]
 
     libs.wcommons = [
+            "sql"     : "io.github.whilein.wcommons:sql:${WCOMMONS_VERSION}",
+            "flow"    : "io.github.whilein.wcommons:flow:${WCOMMONS_VERSION}",
             "agent"   : "io.github.whilein.wcommons:agent:${WCOMMONS_VERSION}",
             "util"    : "io.github.whilein.wcommons:util:${WCOMMONS_VERSION}",
             "config"  : "io.github.whilein.wcommons:config:${WCOMMONS_VERSION}",

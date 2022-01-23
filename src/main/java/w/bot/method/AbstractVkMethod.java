@@ -24,13 +24,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import w.bot.VkBot;
 import w.config.ConfigObject;
+import w.flow.Flow;
+import w.flow.Flows;
 
 import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -82,9 +83,9 @@ public abstract class AbstractVkMethod<R> implements VkMethod<R> {
         out.append('&').append(fieldName).append('=').append(value);
     }
 
-    private R processResponse(final ConfigObject resp) {
-        return resp.findAs("response", type)
-                .orElseThrow(() -> constructError(resp.getObject("error")));
+    private R processResponse(final ConfigObject response) {
+        return response.findAs("response", type)
+                .orElseThrow(() -> constructError(response.getObject("error")));
     }
 
     private RuntimeException constructError(final @Nullable ConfigObject error) {
@@ -94,7 +95,7 @@ public abstract class AbstractVkMethod<R> implements VkMethod<R> {
     }
 
     @Override
-    public @NotNull CompletableFuture<R> execute() {
+    public @NotNull Flow<R> make() {
         val query = new StringBuilder();
         initQuery(query);
 
@@ -105,9 +106,10 @@ public abstract class AbstractVkMethod<R> implements VkMethod<R> {
 
         val configProvider = vkBot.getConfigProvider();
 
-        return vkBot.getHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofByteArray())
-                .thenApply(HttpResponse::body)
-                .thenApply(configProvider::parse)
-                .thenApply(this::processResponse);
+        return Flows.ofSupplier(name, () -> vkBot.getHttpClient().send(request,
+                        HttpResponse.BodyHandlers.ofByteArray()))
+                .map(HttpResponse::body)
+                .map(configProvider::parse)
+                .map(this::processResponse);
     }
 }

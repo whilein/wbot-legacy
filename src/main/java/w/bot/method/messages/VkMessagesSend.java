@@ -16,21 +16,86 @@
 
 package w.bot.method.messages;
 
+import lombok.AccessLevel;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import w.bot.VkBot;
+import w.bot.id.Id;
+import w.bot.id.ImmutableId;
+import w.bot.method.AbstractVkMethod;
 import w.bot.method.VkMethod;
+import w.util.RandomUtils;
 
 /**
  * @author whilein
  */
 public interface VkMessagesSend extends VkMethod<Integer> {
 
+    static @NotNull VkMessagesSend create(final @NotNull VkBot bot) {
+        return new Stub(bot);
+    }
+
     @NotNull VkMessagesSend peerId(@Nullable Integer peerId);
+
+    @NotNull VkMessagesSend peerId(@Nullable Id peerId);
 
     @NotNull VkMessagesSend message(@Nullable String message);
 
     @NotNull VkMessagesSend forwardMessages(int @Nullable ... messageIds);
 
     @NotNull VkMessagesSend replyTo(@Nullable Integer messageId);
+
+    @FieldDefaults(level = AccessLevel.PRIVATE)
+    final class Stub
+            extends AbstractVkMethod<Integer>
+            implements VkMessagesSend {
+
+        Id peerId;
+
+        @Accessors(fluent = true)
+        @Setter
+        String message;
+
+        @Accessors(fluent = true)
+        @Setter
+        int[] forwardMessages;
+
+        @Accessors(fluent = true)
+        @Setter
+        Integer replyTo;
+
+        private Stub(final VkBot vkBot) {
+            super(vkBot, "messages.send", Integer.class);
+        }
+
+        @Override
+        protected void initQuery(final @NotNull StringBuilder out) {
+            super.initQuery(out);
+
+            out.append("&random_id=").append(RandomUtils.getInt());
+
+            append(out, "peer_id", peerId);
+            appendEncoded(out, "message", message);
+
+            append(out, "forward_messages", join(forwardMessages));
+            append(out, "reply_to", replyTo);
+        }
+
+        @Override
+        public @NotNull VkMessagesSend peerId(final @Nullable Integer peerId) {
+            this.peerId = peerId == null ? null : ImmutableId.create(peerId);
+            return this;
+        }
+
+        @Override
+        public @NotNull VkMessagesSend peerId(final @Nullable Id peerId) {
+            this.peerId = peerId;
+            return this;
+        }
+    }
+
 
 }

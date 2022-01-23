@@ -17,10 +17,15 @@
 package w.bot;
 
 import org.jetbrains.annotations.NotNull;
+import w.bot.command.api.CommandManager;
 import w.bot.longpoll.VkBotLongPoll;
 import w.bot.longpoll.event.VkEvent;
+import w.bot.method.execute.VkExecute;
 import w.bot.method.groups.VkGroupsGetLongPollServer;
 import w.bot.method.messages.VkMessagesSend;
+import w.bot.type.chat.ChatManager;
+import w.bot.type.user.UserManager;
+import w.bot.type.user.name.UserNameCache;
 import w.config.ConfigProvider;
 
 import java.net.http.HttpClient;
@@ -42,6 +47,14 @@ public interface VkBot {
 
     @NotNull ConfigProvider getConfigProvider();
 
+    @NotNull UserNameCache getUserNameCache();
+
+    @NotNull UserManager getUserManager();
+
+    @NotNull ChatManager getChatManager();
+
+    @NotNull CommandManager getCommandManager();
+
     @NotNull String getToken();
 
     @NotNull String getVersion();
@@ -49,6 +62,8 @@ public interface VkBot {
     @NotNull HttpClient getHttpClient();
 
     @NotNull VkBotLongPoll getLongPoll();
+
+    <T> @NotNull VkExecute<T> execute(@NotNull Class<T> as);
 
     @NotNull VkMessagesSend messagesSend();
 

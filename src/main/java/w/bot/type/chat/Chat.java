@@ -14,16 +14,12 @@
  *    limitations under the License.
  */
 
-package w.bot.method;
+package w.bot.type.chat;
 
-import org.jetbrains.annotations.NotNull;
-import w.flow.Flow;
+import w.bot.type.MessageSource;
 
 /**
  * @author whilein
  */
-public interface VkMethod<R> {
-
-    @NotNull Flow<R> make();
-
+public interface Chat extends MessageSource {
 }

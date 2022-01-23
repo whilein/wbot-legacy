@@ -52,6 +52,8 @@ dependencies {
     api libs.wcommons.agent
     api libs.wcommons.util
     api libs.wcommons.config
+    api libs.wcommons.flow
+    api libs.wcommons.sql
     api libs.wcommons.eventbus
     api libs.wcommons.geo.api
     api libs.wcommons.geo.maxmind

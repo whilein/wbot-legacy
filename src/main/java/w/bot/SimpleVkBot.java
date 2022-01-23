@@ -16,8 +16,12 @@
 
 package w.bot;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -25,21 +29,30 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.val;
 import org.jetbrains.annotations.NotNull;
+import w.bot.command.api.CommandManager;
+import w.bot.command.api.SimpleCommandManager;
+import w.bot.id.Id;
+import w.bot.id.ImmutableId;
 import w.bot.longpoll.SimpleVkBotLongPoll;
 import w.bot.longpoll.VkBotLongPoll;
 import w.bot.longpoll.event.VkEvent;
-import w.bot.method.groups.VkGroups;
+import w.bot.method.execute.VkExecute;
 import w.bot.method.groups.VkGroupsGetLongPollServer;
-import w.bot.method.messages.VkMessages;
 import w.bot.method.messages.VkMessagesSend;
+import w.bot.type.chat.ChatManager;
+import w.bot.type.chat.SimpleChatManager;
+import w.bot.type.user.SimpleUserManager;
+import w.bot.type.user.UserManager;
+import w.bot.type.user.name.SimpleUserNameCache;
+import w.bot.type.user.name.UserNameCache;
 import w.config.ConfigProvider;
 import w.config.CustomJacksonConfigProvider;
 import w.eventbus.EventBus;
 import w.eventbus.SimpleEventBus;
 import w.eventbus.SubscribeNamespace;
 
+import java.io.IOException;
 import java.net.http.HttpClient;
-import java.util.concurrent.Executors;
 
 /**
  * @author whilein
@@ -61,28 +74,55 @@ public final class SimpleVkBot implements VkBot, SubscribeNamespace {
 
     @Getter
     @NonFinal
+    UserNameCache userNameCache;
+
+    @Getter
+    @NonFinal
     VkBotLongPoll longPoll;
 
+    @Getter
+    @NonFinal
+    UserManager userManager;
+
+    @Getter
+    @NonFinal
+    ChatManager chatManager;
+
+    @Getter
+    @NonFinal
+    CommandManager commandManager;
+
     public static @NotNull VkBot create(final @NotNull VkBotConfig config) {
-        val http = config.getHttp();
-
-        val executor = http.getThreads() > 0
-                ? Executors.newFixedThreadPool(http.getThreads())
-                : Executors.newCachedThreadPool();
-
         val objectMapper = new ObjectMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
+        val module = new SimpleModule();
+
+        module.addDeserializer(Id.class, new JsonDeserializer<>() {
+            @Override
+            public Id deserialize(final JsonParser parser, final DeserializationContext ctx) throws IOException {
+                return ImmutableId.create(parser.getValueAsInt());
+            }
+        });
+
+        objectMapper.registerModule(module);
 
         val vkBot = new SimpleVkBot(
                 config.getAuth().getToken(),
                 CustomJacksonConfigProvider.create(objectMapper),
                 HttpClient.newBuilder()
-                        .executor(executor)
                         .build(),
                 SimpleEventBus.create()
         );
 
-        vkBot.longPoll = SimpleVkBotLongPoll.create(vkBot, config.getLongPoll()); // todo
+        vkBot.userNameCache = SimpleUserNameCache.create(vkBot);
+        vkBot.userManager = SimpleUserManager.create(vkBot.userNameCache);
+
+        vkBot.chatManager = SimpleChatManager.create();
+
+        vkBot.commandManager = SimpleCommandManager.create(vkBot);
+
+        vkBot.longPoll = SimpleVkBotLongPoll.create(vkBot, config.getLongPoll());
 
         return vkBot;
     }
@@ -118,12 +158,17 @@ public final class SimpleVkBot implements VkBot, SubscribeNamespace {
     }
 
     @Override
+    public <T> @NotNull VkExecute<T> execute(final @NotNull Class<T> as) {
+        return VkExecute.create(this, as);
+    }
+
+    @Override
     public @NotNull VkMessagesSend messagesSend() {
-        return VkMessages.send(this);
+        return VkMessagesSend.create(this);
     }
 
     @Override
     public @NotNull VkGroupsGetLongPollServer groupsGetLongPollServer() {
-        return VkGroups.getLongPollServer(this);
+        return VkGroupsGetLongPollServer.create(this);
     }
 }

@@ -14,16 +14,15 @@
  *    limitations under the License.
  */
 
-package w.bot.method;
+package w.bot.type.user;
 
 import org.jetbrains.annotations.NotNull;
-import w.flow.Flow;
 
 /**
  * @author whilein
  */
-public interface VkMethod<R> {
+public interface UserManager {
 
-    @NotNull Flow<R> make();
+    @NotNull User getUser(int userId);
 
 }

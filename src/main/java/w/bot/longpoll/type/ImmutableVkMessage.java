@@ -22,6 +22,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import w.bot.id.Id;
 
 import java.util.List;
 
@@ -45,10 +46,10 @@ public class ImmutableVkMessage implements VkMessage {
     int conversationMessageId;
 
     @JsonProperty("from_id")
-    int fromId;
+    Id fromId;
 
     @JsonProperty("peer_id")
-    int peerId;
+    Id peerId;
 
     @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
     @JsonProperty("out")

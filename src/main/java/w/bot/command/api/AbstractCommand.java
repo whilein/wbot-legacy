@@ -14,16 +14,25 @@
  *    limitations under the License.
  */
 
-package w.bot.method;
+package w.bot.command.api;
 
-import org.jetbrains.annotations.NotNull;
-import w.flow.Flow;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.experimental.FieldDefaults;
 
 /**
  * @author whilein
  */
-public interface VkMethod<R> {
+@Getter
+@FieldDefaults(level = AccessLevel.PROTECTED, makeFinal = true)
+public abstract class AbstractCommand implements Command {
 
-    @NotNull Flow<R> make();
+    String name;
+    String[] aliases;
+
+    protected AbstractCommand(final String name, final String... aliases) {
+        this.name = name;
+        this.aliases = aliases;
+    }
 
 }

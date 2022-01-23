@@ -17,6 +17,7 @@
 package w.bot.longpoll.event;
 
 import w.bot.VkBot;
+import w.bot.id.Id;
 import w.bot.longpoll.type.VkMessage;
 
 /**
@@ -25,7 +26,7 @@ import w.bot.longpoll.type.VkMessage;
 public final class VkChatInviteUserEvent extends VkChatUserEvent {
 
     public VkChatInviteUserEvent(final VkBot bot, final VkMessage message,
-                                 final int memberId, final String email) {
+                                 final Id memberId, final String email) {
         super(bot, message, memberId, email);
     }
 }

@@ -14,16 +14,25 @@
  *    limitations under the License.
  */
 
-package w.bot.method;
+package w.bot.type.user.name;
 
 import org.jetbrains.annotations.NotNull;
-import w.flow.Flow;
 
 /**
  * @author whilein
  */
-public interface VkMethod<R> {
+public interface UserName {
 
-    @NotNull Flow<R> make();
+    @NotNull String getFull();
+
+    @NotNull String getFull(@NotNull UserNameCase nameCase);
+
+    @NotNull String getFirst();
+
+    @NotNull String getFirst(@NotNull UserNameCase nameCase);
+
+    @NotNull String getLast();
+
+    @NotNull String getLast(@NotNull UserNameCase nameCase);
 
 }

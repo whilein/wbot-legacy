@@ -64,8 +64,8 @@ public final class SimpleVkBotLongPoll implements VkBotLongPoll {
     private void _updateServer() {
         val result = vkBot.groupsGetLongPollServer()
                 .groupId(groupId)
-                .execute()
-                .join();
+                .make()
+                .call();
 
         server = result.getServer();
         key = result.getKey();

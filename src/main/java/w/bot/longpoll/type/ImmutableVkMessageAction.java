@@ -21,6 +21,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import w.bot.id.Id;
 
 /**
  * @author whilein
@@ -33,7 +34,7 @@ public class ImmutableVkMessageAction implements VkMessageAction {
     String type;
 
     @JsonProperty("member_id")
-    Integer memberId;
+    Id memberId;
 
     @JsonProperty("text")
     String text;

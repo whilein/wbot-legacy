@@ -36,9 +36,6 @@ public class VkBotConfig {
     @JsonProperty(required = true)
     Auth auth;
 
-    @JsonProperty(required = true)
-    Http http;
-
     @Value
     @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
     @RequiredArgsConstructor
@@ -54,15 +51,4 @@ public class VkBotConfig {
         @JsonProperty(required = true)
         String token;
     }
-
-    @Value
-    @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
-    @RequiredArgsConstructor
-    public static class Http {
-        @JsonProperty(required = true)
-        int threads;
-
-
-    }
-
 }

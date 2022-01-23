@@ -14,61 +14,47 @@
  *    limitations under the License.
  */
 
-package w.bot.method.groups;
+package w.bot.method.execute;
 
 import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.Value;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 import w.bot.VkBot;
 import w.bot.method.AbstractVkMethod;
+import w.bot.method.VkMethod;
 
 /**
  * @author whilein
  */
-@UtilityClass
-public class VkGroups {
+public interface VkExecute<T> extends VkMethod<T> {
 
-    public @NotNull VkGroupsGetLongPollServer getLongPollServer(final @NotNull VkBot bot) {
-        return new VkGroupsGetLongPollServerImpl(bot);
+    static <T> @NotNull VkExecute<T> create(final @NotNull VkBot bot, final @NotNull Class<T> as) {
+        return new Stub<>(bot, as);
     }
 
+    @NotNull VkExecute<T> code(@NotNull String code);
+
     @FieldDefaults(level = AccessLevel.PRIVATE)
-    private static final class VkGroupsGetLongPollServerImpl
-            extends AbstractVkMethod<VkGroupsGetLongPollServer.Result>
-            implements VkGroupsGetLongPollServer {
+    final class Stub<T>
+            extends AbstractVkMethod<T>
+            implements VkExecute<T> {
 
         @Accessors(fluent = true)
         @Setter
-        int groupId;
+        String code;
 
-        private VkGroupsGetLongPollServerImpl(final VkBot vkBot) {
-            super(vkBot, "groups.getLongPollServer", Result.class);
+        private Stub(final VkBot vkBot, final Class<T> as) {
+            super(vkBot, "execute", as);
         }
 
         @Override
         protected void initQuery(final @NotNull StringBuilder out) {
             super.initQuery(out);
 
-            out.append("&group_id=").append(groupId);
+            appendEncoded(out, "code", code);
         }
-
-        @Value
-        @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
-        @RequiredArgsConstructor
-        private static class Result implements VkGroupsGetLongPollServer.Result {
-
-            String key;
-            String server;
-            String ts;
-
-        }
-
     }
 
 }
