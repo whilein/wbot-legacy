@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package w.bot;
+package w.bot.longpoll;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -24,7 +24,8 @@ import lombok.experimental.NonFinal;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
 import org.jetbrains.annotations.NotNull;
-import w.bot.longpoll.VkBotLongPoll;
+import w.bot.VkBot;
+import w.bot.VkBotConfig;
 import w.bot.longpoll.event.VkChatInviteUserEvent;
 import w.bot.longpoll.event.VkChatKickUserEvent;
 import w.bot.longpoll.event.VkMessageEvent;

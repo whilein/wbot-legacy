@@ -25,6 +25,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.val;
 import org.jetbrains.annotations.NotNull;
+import w.bot.longpoll.SimpleVkBotLongPoll;
 import w.bot.longpoll.VkBotLongPoll;
 import w.bot.longpoll.event.VkEvent;
 import w.bot.method.groups.VkGroups;
