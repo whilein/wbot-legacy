@@ -22,11 +22,6 @@
 
 Тут должно быть описание на английском, типа я крутой, но мне лень его придумывать
 
-## Build the project
-
-1. Execute `./gradlew build`
-2. Output file located at `build/libs/te4j.jar`
-
 ## Contact
 
 [Vkontakte](https://vk.com/id623151994),
