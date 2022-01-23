@@ -18,14 +18,14 @@ package w.bot.longpoll.event;
 
 import w.bot.VkBot;
 import w.bot.id.Id;
-import w.bot.longpoll.type.VkMessage;
+import w.bot.type.Message;
 
 /**
  * @author whilein
  */
 public final class VkChatKickUserEvent extends VkChatUserEvent {
 
-    public VkChatKickUserEvent(final VkBot bot, final VkMessage message,
+    public VkChatKickUserEvent(final VkBot bot, final Message message,
                                final Id memberId, final String email) {
         super(bot, message, memberId, email);
     }

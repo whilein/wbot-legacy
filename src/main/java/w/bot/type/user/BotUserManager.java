@@ -14,32 +14,15 @@
  *    limitations under the License.
  */
 
-package w.bot.longpoll.type;
+package w.bot.type.user;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import w.bot.id.Id;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author whilein
  */
-@Value
-@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class ImmutableVkMessageAction implements VkMessageAction {
+public interface BotUserManager {
 
-    String type;
-
-    @JsonProperty("member_id")
-    Id memberId;
-
-    @JsonProperty("text")
-    String text;
-
-    @JsonProperty("email")
-    String email;
+    @NotNull BotUser getUser(int userId);
 
 }

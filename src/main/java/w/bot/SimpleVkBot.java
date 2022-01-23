@@ -29,8 +29,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.val;
 import org.jetbrains.annotations.NotNull;
-import w.bot.command.api.CommandManager;
-import w.bot.command.api.SimpleCommandManager;
+import w.bot.command.CommandManager;
+import w.bot.command.SimpleCommandManager;
 import w.bot.id.Id;
 import w.bot.id.ImmutableId;
 import w.bot.longpoll.SimpleVkBotLongPoll;
@@ -39,10 +39,17 @@ import w.bot.longpoll.event.VkEvent;
 import w.bot.method.execute.VkExecute;
 import w.bot.method.groups.VkGroupsGetLongPollServer;
 import w.bot.method.messages.VkMessagesSend;
-import w.bot.type.chat.ChatManager;
-import w.bot.type.chat.SimpleChatManager;
-import w.bot.type.user.SimpleUserManager;
-import w.bot.type.user.UserManager;
+import w.bot.method.photos.VkPhotosGetMessagesUploadServer;
+import w.bot.method.photos.VkPhotosSaveMessagesPhoto;
+import w.bot.method.users.VkUsersGet;
+import w.bot.photo.MessagesPhotoUploader;
+import w.bot.photo.PhotoDownloader;
+import w.bot.photo.PhotoUploader;
+import w.bot.photo.SimplePhotoDownloader;
+import w.bot.type.chat.BotChatManager;
+import w.bot.type.chat.SimpleBotChatManager;
+import w.bot.type.user.BotUserManager;
+import w.bot.type.user.SimpleBotUserManager;
 import w.bot.type.user.name.SimpleUserNameCache;
 import w.bot.type.user.name.UserNameCache;
 import w.config.ConfigProvider;
@@ -74,6 +81,14 @@ public final class SimpleVkBot implements VkBot, SubscribeNamespace {
 
     @Getter
     @NonFinal
+    PhotoUploader messagesPhotoUploader;
+
+    @Getter
+    @NonFinal
+    PhotoDownloader photoDownloader;
+
+    @Getter
+    @NonFinal
     UserNameCache userNameCache;
 
     @Getter
@@ -82,11 +97,11 @@ public final class SimpleVkBot implements VkBot, SubscribeNamespace {
 
     @Getter
     @NonFinal
-    UserManager userManager;
+    BotUserManager userManager;
 
     @Getter
     @NonFinal
-    ChatManager chatManager;
+    BotChatManager chatManager;
 
     @Getter
     @NonFinal
@@ -115,10 +130,13 @@ public final class SimpleVkBot implements VkBot, SubscribeNamespace {
                 SimpleEventBus.create()
         );
 
-        vkBot.userNameCache = SimpleUserNameCache.create(vkBot);
-        vkBot.userManager = SimpleUserManager.create(vkBot.userNameCache);
+        vkBot.messagesPhotoUploader = MessagesPhotoUploader.create(vkBot);
+        vkBot.photoDownloader = SimplePhotoDownloader.create(vkBot.httpClient);
 
-        vkBot.chatManager = SimpleChatManager.create();
+        vkBot.userNameCache = SimpleUserNameCache.create(vkBot);
+        vkBot.userManager = SimpleBotUserManager.create(vkBot.userNameCache);
+
+        vkBot.chatManager = SimpleBotChatManager.create();
 
         vkBot.commandManager = SimpleCommandManager.create(vkBot);
 
@@ -171,4 +189,20 @@ public final class SimpleVkBot implements VkBot, SubscribeNamespace {
     public @NotNull VkGroupsGetLongPollServer groupsGetLongPollServer() {
         return VkGroupsGetLongPollServer.create(this);
     }
+
+    @Override
+    public @NotNull VkPhotosGetMessagesUploadServer photosGetMessagesUploadServer() {
+        return VkPhotosGetMessagesUploadServer.create(this);
+    }
+
+    @Override
+    public @NotNull VkPhotosSaveMessagesPhoto photosSaveMessagesPhoto() {
+        return VkPhotosSaveMessagesPhoto.create(this);
+    }
+
+    @Override
+    public @NotNull VkUsersGet usersGet() {
+        return VkUsersGet.create(this);
+    }
+
 }

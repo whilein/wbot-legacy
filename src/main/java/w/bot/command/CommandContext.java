@@ -17,31 +17,31 @@
 package w.bot.command;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import w.bot.VkBot;
-import w.bot.command.api.AbstractCommand;
+import w.bot.type.Message;
 import w.bot.type.MessageSource;
-import w.bot.type.user.User;
+import w.bot.type.user.BotUser;
 
 /**
  * @author whilein
  */
-public final class TestCommand extends AbstractCommand {
+public interface CommandContext {
 
-    public TestCommand() {
-        super("тест", "test");
-    }
+    @NotNull VkBot getBot();
 
-    @Override
-    public void execute(
-            final @NotNull VkBot bot,
-            final @NotNull MessageSource source,
-            final @NotNull User sender,
-            final @NotNull String @NotNull [] args
-    ) {
-        bot.messagesSend()
-                .peerId(source.getId())
-                .message("Источник сообщения - " + source + "\nОтправитель - " + sender)
-                .make().callAsync();
-    }
+    @NotNull BotUser getSender();
+
+    @NotNull MessageSource getSource();
+
+    @NotNull Message getMessage();
+
+    @Nullable Message getForwardMessage();
+
+    int getArgumentCount();
+
+    @NotNull String getArgument(int index);
+
+    void sendMessage(@NotNull String text);
 
 }

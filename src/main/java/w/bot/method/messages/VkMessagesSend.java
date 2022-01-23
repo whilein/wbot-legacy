@@ -48,6 +48,8 @@ public interface VkMessagesSend extends VkMethod<Integer> {
 
     @NotNull VkMessagesSend replyTo(@Nullable Integer messageId);
 
+    @NotNull VkMessagesSend attachment(@Nullable String attachment);
+
     @FieldDefaults(level = AccessLevel.PRIVATE)
     final class Stub
             extends AbstractVkMethod<Integer>
@@ -67,6 +69,10 @@ public interface VkMessagesSend extends VkMethod<Integer> {
         @Setter
         Integer replyTo;
 
+        @Accessors(fluent = true)
+        @Setter
+        String attachment;
+
         private Stub(final VkBot vkBot) {
             super(vkBot, "messages.send", Integer.class);
         }
@@ -82,6 +88,8 @@ public interface VkMessagesSend extends VkMethod<Integer> {
 
             append(out, "forward_messages", join(forwardMessages));
             append(out, "reply_to", replyTo);
+
+            append(out, "attachment", attachment);
         }
 
         @Override

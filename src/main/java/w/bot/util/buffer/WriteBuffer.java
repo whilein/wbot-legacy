@@ -14,25 +14,34 @@
  *    limitations under the License.
  */
 
-package w.bot.command.api;
+package w.bot.util.buffer;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.experimental.FieldDefaults;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author whilein
  */
-@Getter
-@FieldDefaults(level = AccessLevel.PROTECTED, makeFinal = true)
-public abstract class AbstractCommand implements Command {
+public interface WriteBuffer {
 
-    String name;
-    String[] aliases;
+    @NotNull WriteBuffer write(int i);
 
-    protected AbstractCommand(final String name, final String... aliases) {
-        this.name = name;
-        this.aliases = aliases;
-    }
+    @NotNull WriteBuffer write(@NotNull String text);
+
+    @NotNull WriteBuffer write(byte @NotNull [] bytes);
+
+    @NotNull WriteBuffer write(byte @NotNull [] bytes, int off, int len);
+
+    @NotNull WriteBuffer length(int length);
+
+    int getPosition();
+
+    int getSize();
+
+    int getCapacity();
+
+    byte @NotNull [] toByteArray();
+
+    @NotNull String toString();
+
 
 }

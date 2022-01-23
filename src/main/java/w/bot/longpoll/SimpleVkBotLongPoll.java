@@ -29,7 +29,7 @@ import w.bot.VkBotConfig;
 import w.bot.longpoll.event.VkChatInviteUserEvent;
 import w.bot.longpoll.event.VkChatKickUserEvent;
 import w.bot.longpoll.event.VkMessageEvent;
-import w.bot.longpoll.type.VkMessage;
+import w.bot.type.Message;
 
 import java.net.URI;
 import java.net.http.HttpRequest;
@@ -109,7 +109,7 @@ public final class SimpleVkBotLongPoll implements VkBotLongPoll {
                             switch (type) {
                                 case "message_new" -> {
                                     val message = update.findObject("object")
-                                            .map(object -> object.getAs("message", VkMessage.class))
+                                            .map(object -> object.getAs("message", Message.class))
                                             .orElseThrow();
                                     val action = message.getAction();
                                     if (action != null) {

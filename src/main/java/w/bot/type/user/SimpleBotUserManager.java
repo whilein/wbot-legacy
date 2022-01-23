@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package w.bot.type.chat;
+package w.bot.type.user;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -25,34 +25,42 @@ import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 import w.bot.id.Id;
 import w.bot.id.ImmutableId;
+import w.bot.type.user.name.UserName;
+import w.bot.type.user.name.UserNameCache;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author whilein
  */
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public final class SimpleChatManager implements ChatManager {
+public final class SimpleBotUserManager implements BotUserManager {
 
-    Int2ObjectMap<Chat> knownChats;
+    UserNameCache userNameCache;
+    Int2ObjectMap<BotUser> knownUsers;
 
     @Override
-    public @NotNull Chat getChat(final int chatId) {
-        return knownChats.computeIfAbsent(chatId, __ -> new ChatImpl(ImmutableId.create(chatId)));
+    public @NotNull BotUser getUser(final int userId) {
+        return knownUsers.computeIfAbsent(userId, __ -> new BotUserImpl(userNameCache, ImmutableId.create(userId)));
     }
 
-    public static @NotNull ChatManager create() {
-        return new SimpleChatManager(new Int2ObjectOpenHashMap<>());
+    public static @NotNull BotUserManager create(final @NotNull UserNameCache userNameCache) {
+        return new SimpleBotUserManager(userNameCache, new Int2ObjectOpenHashMap<>());
     }
 
     @Getter
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    private static final class ChatImpl implements Chat {
+    private static final class BotUserImpl implements BotUser {
+
+        UserNameCache userNameCache;
+
         Id id;
 
         @Override
         public String toString() {
-            return "Chat[id=" + id + "]";
+            return "User[id=" + id + "]";
         }
 
         @Override
@@ -62,17 +70,22 @@ public final class SimpleChatManager implements ChatManager {
 
         @Override
         public boolean equals(final Object obj) {
-            return obj == this || obj instanceof Chat chat && chat.getId().equals(id);
+            return obj == this || obj instanceof BotUser user && user.getId().equals(id);
         }
 
         @Override
         public boolean isUser() {
-            return false;
+            return true;
         }
 
         @Override
         public boolean isChat() {
-            return true;
+            return false;
+        }
+
+        @Override
+        public @NotNull CompletableFuture<@NotNull UserName> getName() {
+            return userNameCache.getName(id.asInt());
         }
     }
 

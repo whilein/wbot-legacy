@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Delegate;
 import lombok.experimental.FieldDefaults;
 import w.bot.VkBot;
-import w.bot.longpoll.type.VkMessage;
+import w.bot.type.Message;
 
 /**
  * @author whilein
@@ -34,7 +34,7 @@ public abstract class VkMessageNewEvent implements VkEvent {
 
     VkBot bot;
 
-    @Delegate(types = VkMessage.class)
-    VkMessage message;
+    @Delegate(types = Message.class)
+    Message message;
 
 }

@@ -14,21 +14,27 @@
  *    limitations under the License.
  */
 
-package w.bot.command.api;
+package w.bot.command;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.val;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import w.bot.VkBot;
-import w.bot.command.TestCommand;
 import w.bot.longpoll.event.VkMessageEvent;
+import w.bot.quote.QuoteCommand;
+import w.bot.type.Message;
+import w.bot.type.MessageSource;
+import w.bot.type.user.BotUser;
 import w.eventbus.Subscribe;
+import w.util.Iterables;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author whilein
@@ -47,7 +53,7 @@ public final class SimpleCommandManager implements CommandManager {
         val commandManager = new SimpleCommandManager(bot, new HashMap<>());
         bot.registerListener(commandManager);
 
-        commandManager.register(new TestCommand());
+        commandManager.register(new QuoteCommand());
 
         return commandManager;
     }
@@ -82,16 +88,52 @@ public final class SimpleCommandManager implements CommandManager {
             return;
         }
 
-        val commandArguments = commandContents.length > 1
-                ? Arrays.copyOfRange(commandContents, 1, commandContents.length)
-                : EMPTY_ARGUMENTS;
-
         val source = peerId.isChat()
                 ? vkBot.getChatManager().getChat(peerId.asInt())
                 : vkBot.getUserManager().getUser(peerId.asInt());
 
         val sender = vkBot.getUserManager().getUser(fromId.asInt());
 
-        command.execute(vkBot, source, sender, commandArguments);
+        command.execute(new CommandContextImpl(vkBot, sender, source, event.getMessage(), commandContents));
+    }
+
+    @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    private static final class CommandContextImpl implements CommandContext {
+        @Getter
+        VkBot bot;
+
+        @Getter
+        BotUser sender;
+
+        @Getter
+        MessageSource source;
+
+        @Getter
+        Message message;
+
+        String[] contents;
+
+        @Override
+        public @Nullable Message getForwardMessage() {
+            return Optional.ofNullable(message.getReplyMessage())
+                    .or(() -> Iterables.getFirst(message.getForwardMessages()))
+                    .orElse(null);
+        }
+
+        @Override
+        public int getArgumentCount() {
+            return contents.length - 1;
+        }
+
+        @Override
+        public @NotNull String getArgument(final int index) {
+            return contents[index + 1];
+        }
+
+        @Override
+        public void sendMessage(final @NotNull String text) {
+            bot.messagesSend().message(text).peerId(source.getId()).make().callAsync();
+        }
     }
 }

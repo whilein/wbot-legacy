@@ -14,41 +14,18 @@
  *    limitations under the License.
  */
 
-package w.bot.longpoll.type;
+package w.bot.photo;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import w.bot.id.Id;
+import w.flow.Flow;
 
-import java.util.List;
+import java.awt.image.BufferedImage;
 
 /**
  * @author whilein
  */
-@JsonDeserialize(as = ImmutableVkMessage.class)
-public interface VkMessage {
+public interface PhotoDownloader {
 
-    @NotNull String getText();
-
-    long getDate();
-
-    @NotNull Id getFromId();
-
-    @NotNull Id getPeerId();
-
-    int getId();
-
-    int getConversationMessageId();
-
-    boolean isOut();
-
-    @Nullable VkMessageAction getAction();
-
-    @Nullable VkMessage getReplyMessage();
-
-    @NotNull List<@NotNull VkMessage> getForwardMessages();
-
-    // todo attachments
+    @NotNull Flow<@NotNull BufferedImage> download(@NotNull String url);
 
 }

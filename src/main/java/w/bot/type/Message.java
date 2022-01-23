@@ -14,19 +14,41 @@
  *    limitations under the License.
  */
 
-package w.bot.longpoll.event;
+package w.bot.type;
 
-import w.bot.VkBot;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import w.bot.id.Id;
-import w.bot.type.Message;
+
+import java.util.List;
 
 /**
  * @author whilein
  */
-public final class VkChatInviteUserEvent extends VkChatUserEvent {
+@JsonDeserialize(as = ImmutableMessage.class)
+public interface Message {
 
-    public VkChatInviteUserEvent(final VkBot bot, final Message message,
-                                 final Id memberId, final String email) {
-        super(bot, message, memberId, email);
-    }
+    @NotNull String getText();
+
+    long getDate();
+
+    @NotNull Id getFromId();
+
+    @NotNull Id getPeerId();
+
+    int getId();
+
+    int getConversationMessageId();
+
+    boolean isOut();
+
+    @Nullable MessageAction getAction();
+
+    @Nullable Message getReplyMessage();
+
+    @NotNull List<@NotNull Message> getForwardMessages();
+
+    // todo attachments
+
 }

@@ -14,15 +14,31 @@
  *    limitations under the License.
  */
 
-package w.bot.type.chat;
+package w.bot.quote;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.awt.image.BufferedImage;
 
 /**
  * @author whilein
  */
-public interface ChatManager {
+public interface QuoteGenerator {
 
-    @NotNull Chat getChat(int chatId);
+    @NotNull QuoteGenerator profileImage(@NotNull BufferedImage image);
+
+    @NotNull QuoteGenerator backgroundImage(@NotNull BufferedImage image);
+
+    @NotNull QuoteGenerator text(@NotNull String text);
+
+    @NotNull QuoteGenerator title(@NotNull String title);
+
+    @NotNull QuoteGenerator profileFirstName(@NotNull String name);
+
+    @NotNull QuoteGenerator profileLastName(@NotNull String name);
+
+    @NotNull QuoteGenerator profileDescription(@NotNull String description);
+
+    @NotNull BufferedImage generate();
 
 }

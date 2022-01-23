@@ -14,17 +14,13 @@
  *    limitations under the License.
  */
 
-package w.bot.longpoll.type;
+package w.bot.type;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import w.bot.id.Id;
-
-import java.util.List;
 
 /**
  * @author whilein
@@ -32,33 +28,16 @@ import java.util.List;
 @Value
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class ImmutableVkMessage implements VkMessage {
+public class ImmutablePhoto implements Photo {
 
     int id;
 
-    String text;
+    @JsonProperty("album_id")
+    int albumId;
+
+    @JsonProperty("owner_id")
+    int ownerId;
 
     long date;
-
-    VkMessageAction action;
-
-    @JsonProperty("conversation_message_id")
-    int conversationMessageId;
-
-    @JsonProperty("from_id")
-    Id fromId;
-
-    @JsonProperty("peer_id")
-    Id peerId;
-
-    @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
-    @JsonProperty("out")
-    boolean out;
-
-    @JsonProperty("reply_message")
-    VkMessage replyMessage;
-
-    @JsonProperty("fwd_messages")
-    List<VkMessage> forwardMessages;
 
 }

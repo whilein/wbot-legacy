@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package w.bot.longpoll.type;
+package w.bot.type;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.jetbrains.annotations.NotNull;
@@ -24,8 +24,8 @@ import w.bot.id.Id;
 /**
  * @author whilein
  */
-@JsonDeserialize(as = ImmutableVkMessageAction.class)
-public interface VkMessageAction {
+@JsonDeserialize(as = ImmutableMessageAction.class)
+public interface MessageAction {
 
     /**
      * Тип действия. Возможные значения:

@@ -14,15 +14,25 @@
  *    limitations under the License.
  */
 
-package w.bot.type.user;
+package w.bot.command;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.experimental.FieldDefaults;
 
 /**
  * @author whilein
  */
-public interface UserManager {
+@Getter
+@FieldDefaults(level = AccessLevel.PROTECTED, makeFinal = true)
+public abstract class AbstractCommand implements Command {
 
-    @NotNull User getUser(int userId);
+    String name;
+    String[] aliases;
+
+    protected AbstractCommand(final String name, final String... aliases) {
+        this.name = name;
+        this.aliases = aliases;
+    }
 
 }

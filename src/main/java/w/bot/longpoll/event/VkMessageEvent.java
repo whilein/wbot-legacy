@@ -17,13 +17,13 @@
 package w.bot.longpoll.event;
 
 import w.bot.VkBot;
-import w.bot.longpoll.type.VkMessage;
+import w.bot.type.Message;
 
 /**
  * @author whilein
  */
 public final class VkMessageEvent extends VkMessageNewEvent {
-    public VkMessageEvent(final VkBot bot, final VkMessage message) {
+    public VkMessageEvent(final VkBot bot, final Message message) {
         super(bot, message);
     }
 }

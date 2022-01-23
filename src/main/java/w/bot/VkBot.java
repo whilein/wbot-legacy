@@ -17,14 +17,19 @@
 package w.bot;
 
 import org.jetbrains.annotations.NotNull;
-import w.bot.command.api.CommandManager;
+import w.bot.command.CommandManager;
 import w.bot.longpoll.VkBotLongPoll;
 import w.bot.longpoll.event.VkEvent;
 import w.bot.method.execute.VkExecute;
 import w.bot.method.groups.VkGroupsGetLongPollServer;
 import w.bot.method.messages.VkMessagesSend;
-import w.bot.type.chat.ChatManager;
-import w.bot.type.user.UserManager;
+import w.bot.method.photos.VkPhotosGetMessagesUploadServer;
+import w.bot.method.photos.VkPhotosSaveMessagesPhoto;
+import w.bot.method.users.VkUsersGet;
+import w.bot.photo.PhotoDownloader;
+import w.bot.photo.PhotoUploader;
+import w.bot.type.chat.BotChatManager;
+import w.bot.type.user.BotUserManager;
 import w.bot.type.user.name.UserNameCache;
 import w.config.ConfigProvider;
 
@@ -47,11 +52,15 @@ public interface VkBot {
 
     @NotNull ConfigProvider getConfigProvider();
 
+    @NotNull PhotoUploader getMessagesPhotoUploader();
+
+    @NotNull PhotoDownloader getPhotoDownloader();
+
     @NotNull UserNameCache getUserNameCache();
 
-    @NotNull UserManager getUserManager();
+    @NotNull BotUserManager getUserManager();
 
-    @NotNull ChatManager getChatManager();
+    @NotNull BotChatManager getChatManager();
 
     @NotNull CommandManager getCommandManager();
 
@@ -68,5 +77,11 @@ public interface VkBot {
     @NotNull VkMessagesSend messagesSend();
 
     @NotNull VkGroupsGetLongPollServer groupsGetLongPollServer();
+
+    @NotNull VkPhotosGetMessagesUploadServer photosGetMessagesUploadServer();
+
+    @NotNull VkPhotosSaveMessagesPhoto photosSaveMessagesPhoto();
+
+    @NotNull VkUsersGet usersGet();
 
 }

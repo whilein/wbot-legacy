@@ -14,35 +14,35 @@
  *    limitations under the License.
  */
 
-package w.bot.longpoll.event;
+package w.bot.util.buffer;
 
 import lombok.AccessLevel;
-import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import w.bot.VkBot;
-import w.bot.id.Id;
-import w.bot.type.Message;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.OutputStream;
 
 /**
  * @author whilein
  */
-@Getter
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public abstract class VkChatUserEvent extends VkMessageNewEvent {
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+public final class WriteBufferOutputStream extends OutputStream {
 
-    Id memberId;
-    String email;
+    WriteBuffer writeBuffer;
 
-    public VkChatUserEvent(final VkBot bot, final Message message,
-                           final Id memberId, final String email) {
-        super(bot, message);
-
-        this.memberId = memberId;
-        this.email = email;
+    public static @NotNull OutputStream wrap(final @NotNull WriteBuffer writeBuffer) {
+        return new WriteBufferOutputStream(writeBuffer);
     }
 
-    public boolean isEmail() {
-        return memberId.isGroup() && email != null;
+    @Override
+    public void write(final byte @NotNull [] b, final int off, final int len) {
+        writeBuffer.write(b, off, len);
     }
 
+    @Override
+    public void write(final int b) {
+        writeBuffer.write(b);
+    }
 }

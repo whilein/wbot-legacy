@@ -22,11 +22,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.io.IoBuilder;
 import w.bot.SimpleVkBot;
 import w.bot.VkBotConfig;
-import w.bot.longpoll.event.VkChatInviteUserEvent;
-import w.bot.longpoll.event.VkChatKickUserEvent;
-import w.bot.longpoll.event.VkMessageEvent;
 import w.config.SimpleFileConfig;
-import w.eventbus.Subscribe;
 
 /**
  * @author whilein
@@ -46,20 +42,7 @@ public class Main {
         config.saveDefaults("/config.yml");
 
         val bot = SimpleVkBot.create(config.asType(VkBotConfig.class));
-        bot.registerListener(Main.class);
         bot.getLongPoll().start();
     }
 
-    @Subscribe(exactEvent = true)
-    private static void onMessage(final VkMessageEvent event) {
-        System.out.println(event.getMessage());
-    }
-
-    @Subscribe(exactEvent = true)
-    private static void onInvite(final VkChatInviteUserEvent event) {
-    }
-
-    @Subscribe(exactEvent = true)
-    private static void onKick(final VkChatKickUserEvent event) {
-    }
 }

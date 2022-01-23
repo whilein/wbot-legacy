@@ -14,19 +14,32 @@
  *    limitations under the License.
  */
 
-package w.bot.longpoll.event;
+package w.bot.type;
 
-import w.bot.VkBot;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import w.bot.id.Id;
-import w.bot.type.Message;
 
 /**
  * @author whilein
  */
-public final class VkChatInviteUserEvent extends VkChatUserEvent {
+@Value
+@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+public class ImmutableMessageAction implements MessageAction {
 
-    public VkChatInviteUserEvent(final VkBot bot, final Message message,
-                                 final Id memberId, final String email) {
-        super(bot, message, memberId, email);
-    }
+    String type;
+
+    @JsonProperty("member_id")
+    Id memberId;
+
+    @JsonProperty("text")
+    String text;
+
+    @JsonProperty("email")
+    String email;
+
 }

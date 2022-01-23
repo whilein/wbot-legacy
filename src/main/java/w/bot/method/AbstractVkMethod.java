@@ -59,6 +59,12 @@ public abstract class AbstractVkMethod<R> implements VkMethod<R> {
                 : null;
     }
 
+    protected @Nullable String join(final String @Nullable [] strings) {
+        return strings != null
+                ? String.join(", ", strings)
+                : null;
+    }
+
     protected void appendEncoded(
             final @NotNull StringBuilder out,
             final @NotNull String fieldName,
@@ -104,12 +110,10 @@ public abstract class AbstractVkMethod<R> implements VkMethod<R> {
                 .uri(URI.create(API_URL + name))
                 .build();
 
-        val configProvider = vkBot.getConfigProvider();
-
         return Flows.ofSupplier(name, () -> vkBot.getHttpClient().send(request,
                         HttpResponse.BodyHandlers.ofByteArray()))
                 .map(HttpResponse::body)
-                .map(configProvider::parse)
+                .map(vkBot.getConfigProvider()::parse)
                 .map(this::processResponse);
     }
 }

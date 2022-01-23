@@ -21,5 +21,5 @@ import w.bot.type.MessageSource;
 /**
  * @author whilein
  */
-public interface Chat extends MessageSource {
+public interface BotChat extends MessageSource {
 }

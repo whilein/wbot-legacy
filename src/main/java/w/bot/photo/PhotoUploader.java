@@ -14,19 +14,19 @@
  *    limitations under the License.
  */
 
-package w.bot.type.user;
+package w.bot.photo;
 
 import org.jetbrains.annotations.NotNull;
-import w.bot.type.MessageSource;
-import w.bot.type.user.name.UserName;
+import w.bot.type.Photo;
+import w.flow.Flow;
 
-import java.util.concurrent.CompletableFuture;
+import java.awt.image.BufferedImage;
 
 /**
  * @author whilein
  */
-public interface User extends MessageSource {
+public interface PhotoUploader {
 
-    @NotNull CompletableFuture<@NotNull UserName> getName();
+    @NotNull Flow<@NotNull Photo> uploadPhoto(@NotNull BufferedImage image);
 
 }

@@ -14,19 +14,22 @@
  *    limitations under the License.
  */
 
-package w.bot.longpoll.event;
+package w.bot.type;
 
-import w.bot.VkBot;
-import w.bot.id.Id;
-import w.bot.type.Message;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
  * @author whilein
  */
-public final class VkChatInviteUserEvent extends VkChatUserEvent {
+@JsonDeserialize(as = ImmutablePhoto.class)
+public interface Photo {
 
-    public VkChatInviteUserEvent(final VkBot bot, final Message message,
-                                 final Id memberId, final String email) {
-        super(bot, message, memberId, email);
-    }
+    int getId();
+
+    int getAlbumId();
+
+    int getOwnerId();
+
+    long getDate();
+
 }
